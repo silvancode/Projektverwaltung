@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Mitarbeiter: {{ mitarbeiter.name }} {{ mitarbeiter.vorname }}</h2>
+<p><strong>Abteilung:</strong> {{ mitarbeiter.abteilung }}</p>
+<p><strong>Arbeitspensum (%):</strong> {{ mitarbeiter.arbeitspensum }}</p>
+<p><strong>Mögliche Funktionen:</strong></p>
+<p>{{ mitarbeiter.moegliche_funktionen }}</p>
+
+<a href="{{ url_for('mitarbeiter.edit_mitarbeiter', mitarbeiter_id=mitarbeiter.personalnummer) }}" class="button">Bearbeiten</a>
+<a href="{{ url_for('mitarbeiter.list_mitarbeiter') }}" class="button">Zurück zur Liste</a>
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Mitarbeiterliste</h2>
+<table border="1">
+    <thead>
+        <tr>
+            <th>Personalnummer</th>
+            <th>Name</th>
+            <th>Vorname</th>
+            <th>Abteilung</th>
+            <th>Arbeitspensum</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for mitarbeiter in mitarbeiter %}
+        <tr>
+            <td>{{ mitarbeiter.Personalnummer }}</td>
+            <td>{{ mitarbeiter.Name }}</td>
+            <td>{{ mitarbeiter.Vorname }}</td>
+            <td>{{ mitarbeiter.Abteilung }}</td>
+            <td>{{ mitarbeiter.Arbeitspensum }}%</td>
+            <td>
+                <a href="{{ url_for('mitarbeiter.view_mitarbeiter', mitarbeiter_id=mitarbeiter.Personalnummer) }}">Ansehen</a> |
+                <a href="{{ url_for('mitarbeiter.edit_mitarbeiter', mitarbeiter_id=mitarbeiter.Personalnummer) }}">Bearbeiten</a> |
+                <a href="{{ url_for('mitarbeiter.delete_mitarbeiter', mitarbeiter_id=mitarbeiter.Personalnummer) }}"
+                   onclick="return confirm('Sind Sie sicher, dass Sie diesen Mitarbeiter löschen möchten?');">
+                   Löschen
+                </a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<a href="{{ url_for('mitarbeiter.create_mitarbeiter') }}">Neuen Mitarbeiter hinzufügen</a>
+{% endblock %}

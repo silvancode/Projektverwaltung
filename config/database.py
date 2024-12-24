@@ -5,13 +5,7 @@ from config.settings import DATABASE_CONFIG
 
 def create_connection():
     try:
-        connection = mysql.connector.connect(
-            host=DATABASE_CONFIG['host'],
-            user=DATABASE_CONFIG['user'],
-            password=DATABASE_CONFIG['password'],
-            database=DATABASE_CONFIG['database'],
-            port=3306
-        )
+        connection = mysql.connector.connect(**DATABASE_CONFIG)
         if connection.is_connected():
             print("Verbindung zu MySQL hergestellt.")
         return connection

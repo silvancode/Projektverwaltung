@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Neuen Mitarbeiter hinzufügen</h2>
+
+<form method="POST">
+    <div>
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required>
+    </div>
+
+    <div>
+        <label for="vorname">Vorname:</label>
+        <input type="text" id="vorname" name="vorname" required>
+    </div>
+
+    <div>
+        <label for="abteilung">Abteilung:</label>
+        <input type="text" id="abteilung" name="abteilung">
+    </div>
+
+    <div>
+        <label for="arbeitspensum">Arbeitspensum (%):</label>
+        <input type="number" id="arbeitspensum" name="arbeitspensum" step="0.01" min="0" max="100" required>
+    </div>
+
+    <div>
+        <label for="moegliche_funktionen">Mögliche Funktionen:</label>
+        <textarea id="moegliche_funktionen" name="moegliche_funktionen"></textarea>
+    </div>
+
+    <div>
+        <button type="submit">Speichern</button>
+        <a href="{{ url_for('mitarbeiter.list_mitarbeiter') }}">Abbrechen</a>
+    </div>
+</form>
+{% endblock %}

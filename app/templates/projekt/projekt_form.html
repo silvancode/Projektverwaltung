@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Neues Projekt erstellen</h2>
+
+<form method="POST">
+    <div>
+        <label for="projekttitel">Projekttitel:</label>
+        <input type="text" id="projekttitel" name="projekttitel" required>
+    </div>
+
+    <div>
+        <label for="beschreibung">Projektbeschreibung:</label>
+        <textarea id="beschreibung" name="beschreibung" required></textarea>
+    </div>
+
+    <div>
+        <label for="bewilligungsdatum">Bewilligungsdatum:</label>
+        <input type="date" id="bewilligungsdatum" name="bewilligungsdatum" required>
+    </div>
+
+    <div>
+        <label for="prioritaet">Priorität:</label>
+        <select id="prioritaet" name="prioritaet" required>
+            <option value="hoch">Hoch</option>
+            <option value="mittel">Mittel</option>
+            <option value="niedrig">Niedrig</option>
+        </select>
+    </div>
+
+    <div>
+        <label for="status">Status:</label>
+        <select id="status" name="status" required>
+            <option value="in Planung">In Planung</option>
+            <option value="laufend">Laufend</option>
+            <option value="abgeschlossen">Abgeschlossen</option>
+            <option value="on hold">On Hold</option>
+        </select>
+    </div>
+
+    <div>
+        <label for="startdatum_geplant">Startdatum (geplant):</label>
+        <input type="date" id="startdatum_geplant" name="startdatum_geplant" required>
+    </div>
+
+    <div>
+        <label for="enddatum_geplant">Enddatum (geplant):</label>
+        <input type="date" id="enddatum_geplant" name="enddatum_geplant" required>
+    </div>
+
+    <div>
+        <label for="projektleiter_id">Projektleiter (ID):</label>
+        <input type="number" id="projektleiter_id" name="projektleiter_id" required>
+    </div>
+
+    <div>
+        <label for="vorgehensmodell">Vorgehensmodell:</label>
+        <input type="text" id="vorgehensmodell" name="vorgehensmodell" required>
+    </div>
+
+    <div>
+        <label for="fortschritt">Projektfortschritt (%):</label>
+        <input type="number" id="fortschritt" name="fortschritt" step="0.01" min="0" max="100" required>
+    </div>
+
+    <div>
+        <button type="submit">Projekt speichern</button>
+        <a href="{{ url_for('projekt.list_projekte') }}">Abbrechen</a>
+    </div>
+</form>
+{% endblock %}
