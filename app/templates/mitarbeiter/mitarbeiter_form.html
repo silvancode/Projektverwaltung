@@ -1,36 +1,40 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h2>Neuen Mitarbeiter hinzufügen</h2>
+<h2>{% if mitarbeiter %}Mitarbeiter bearbeiten{% else %}Neuen Mitarbeiter hinzufügen{% endif %}</h2>
 
 <form method="POST">
     <div>
         <label for="name">Name:</label>
-        <input type="text" id="name" name="name" required>
+        <input type="text" id="name" name="name"
+               value="{% if mitarbeiter %}{{ mitarbeiter.name }}{% endif %}" required>
     </div>
 
     <div>
         <label for="vorname">Vorname:</label>
-        <input type="text" id="vorname" name="vorname" required>
+        <input type="text" id="vorname" name="vorname"
+               value="{% if mitarbeiter %}{{ mitarbeiter.vorname }}{% endif %}" required>
     </div>
 
     <div>
         <label for="abteilung">Abteilung:</label>
-        <input type="text" id="abteilung" name="abteilung">
+        <input type="text" id="abteilung" name="abteilung"
+               value="{% if mitarbeiter %}{{ mitarbeiter.abteilung }}{% endif %}">
     </div>
 
     <div>
         <label for="arbeitspensum">Arbeitspensum (%):</label>
-        <input type="number" id="arbeitspensum" name="arbeitspensum" step="0.01" min="0" max="100" required>
+        <input type="number" id="arbeitspensum" name="arbeitspensum" step="0.01" min="0" max="100"
+               value="{% if mitarbeiter %}{{ mitarbeiter.arbeitspensum }}{% endif %}" required>
     </div>
 
     <div>
         <label for="moegliche_funktionen">Mögliche Funktionen:</label>
-        <textarea id="moegliche_funktionen" name="moegliche_funktionen"></textarea>
+        <textarea id="moegliche_funktionen" name="moegliche_funktionen">{% if mitarbeiter %}{{ mitarbeiter.moegliche_funktionen }}{% endif %}</textarea>
     </div>
 
     <div>
-        <button type="submit">Speichern</button>
+        <button type="submit">{% if mitarbeiter %}Änderungen speichern{% else %}Mitarbeiter hinzufügen{% endif %}</button>
         <a href="{{ url_for('mitarbeiter.list_mitarbeiter') }}">Abbrechen</a>
     </div>
 </form>

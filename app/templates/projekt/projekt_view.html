@@ -2,16 +2,16 @@
 
 {% block content %}
 <h2>Projekt: {{ projekt.projekttitel }}</h2>
-<p><strong>Projektleiter:</strong> {{ projekt.projektleiter_id }}</p>
+<p><strong>Projektleiter:</strong> {{ projekt.projektleiter_vorname }} {{ projekt.projektleiter_name }}</p>
 <p><strong>Priorität:</strong> {{ projekt.prioritaet }}</p>
 <p><strong>Status:</strong> {{ projekt.status }}</p>
 <p><strong>Bewilligungsdatum:</strong> {{ projekt.bewilligungsdatum }}</p>
 <p><strong>Startdatum (geplant):</strong> {{ projekt.startdatum_geplant }}</p>
 <p><strong>Enddatum (geplant):</strong> {{ projekt.enddatum_geplant }}</p>
-<p><strong>Fortschritt:</strong> {{ projekt.fortschritt }}%</p>
+<p><strong>Fortschritt:</strong> {{ projekt.fortschritt }}</p>
 <p><strong>Beschreibung:</strong></p>
 <p>{{ projekt.beschreibung }}</p>
 
-<a href="{{ url_for('projekt.edit_projekt', projekt_id=projekt.projektreferenz) }}" class="button">Bearbeiten</a>
+<a href="{{ url_for('projekt.upsert_projekt', projekt_id=projekt.projekt_id) }}" class="button">Bearbeiten</a>
 <a href="{{ url_for('projekt.list_projekte') }}" class="button">Zurück zur Liste</a>
 {% endblock %}

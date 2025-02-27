@@ -1,70 +1,84 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h2>Neues Projekt erstellen</h2>
+<h2>{% if projekt %}Projekt bearbeiten{% else %}Neues Projekt erstellen{% endif %}</h2>
 
 <form method="POST">
     <div>
         <label for="projekttitel">Projekttitel:</label>
-        <input type="text" id="projekttitel" name="projekttitel" required>
+        <input type="text" id="projekttitel" name="projekttitel"
+               value="{% if projekt %}{{ projekt.projekttitel }}{% endif %}" required>
     </div>
 
     <div>
         <label for="beschreibung">Projektbeschreibung:</label>
-        <textarea id="beschreibung" name="beschreibung" required></textarea>
+        <textarea id="beschreibung" name="beschreibung" required>{% if projekt %}{{ projekt.beschreibung }}{% endif %}</textarea>
     </div>
 
     <div>
         <label for="bewilligungsdatum">Bewilligungsdatum:</label>
-        <input type="date" id="bewilligungsdatum" name="bewilligungsdatum" required>
+        <input type="date" id="bewilligungsdatum" name="bewilligungsdatum"
+               value="{% if projekt %}{{ projekt.bewilligungsdatum }}{% endif %}" required>
     </div>
 
     <div>
         <label for="prioritaet">Priorität:</label>
         <select id="prioritaet" name="prioritaet" required>
-            <option value="hoch">Hoch</option>
-            <option value="mittel">Mittel</option>
-            <option value="niedrig">Niedrig</option>
+            <option value="hoch" {% if projekt and projekt.prioritaet == "hoch" %}selected{% endif %}>Hoch</option>
+            <option value="mittel" {% if projekt and projekt.prioritaet == "mittel" %}selected{% endif %}>Mittel</option>
+            <option value="niedrig" {% if projekt and projekt.prioritaet == "niedrig" %}selected{% endif %}>Niedrig</option>
         </select>
     </div>
 
     <div>
         <label for="status">Status:</label>
         <select id="status" name="status" required>
-            <option value="in Planung">In Planung</option>
-            <option value="laufend">Laufend</option>
-            <option value="abgeschlossen">Abgeschlossen</option>
-            <option value="on hold">On Hold</option>
+            <option value="in Planung" {% if projekt and projekt.status == "in Planung" %}selected{% endif %}>In Planung</option>
+            <option value="laufend" {% if projekt and projekt.status == "laufend" %}selected{% endif %}>Laufend</option>
+            <option value="abgeschlossen" {% if projekt and projekt.status == "abgeschlossen" %}selected{% endif %}>Abgeschlossen</option>
+            <option value="on hold" {% if projekt and projekt.status == "on hold" %}selected{% endif %}>On Hold</option>
         </select>
     </div>
 
     <div>
         <label for="startdatum_geplant">Startdatum (geplant):</label>
-        <input type="date" id="startdatum_geplant" name="startdatum_geplant" required>
+        <input type="date" id="startdatum_geplant" name="startdatum_geplant"
+               value="{% if projekt %}{{ projekt.startdatum_geplant }}{% endif %}" required>
     </div>
 
     <div>
         <label for="enddatum_geplant">Enddatum (geplant):</label>
-        <input type="date" id="enddatum_geplant" name="enddatum_geplant" required>
+        <input type="date" id="enddatum_geplant" name="enddatum_geplant"
+               value="{% if projekt %}{{ projekt.enddatum_geplant }}{% endif %}" required>
     </div>
 
     <div>
-        <label for="projektleiter_id">Projektleiter (ID):</label>
-        <input type="number" id="projektleiter_id" name="projektleiter_id" required>
+        <label for="projektleiter_id">Projektleiter:</label>
+        <select id="projektleiter_id" name="projektleiter_id" required>
+            <option value="" disabled {% if not projekt %}selected{% endif %}>Projektleiter auswählen</option>
+            {% for mitarbeiter in mitarbeiter %}
+                <option value="{{ mitarbeiter.Personalnummer }}"
+                        {% if projekt and projekt.projektleiter_id == mitarbeiter.Personalnummer %}selected{% endif %}>
+                    {{ mitarbeiter.Vorname }} {{ mitarbeiter.Name }}
+                </option>
+            {% endfor %}
+        </select>
     </div>
 
     <div>
         <label for="vorgehensmodell">Vorgehensmodell:</label>
-        <input type="text" id="vorgehensmodell" name="vorgehensmodell" required>
+        <input type="text" id="vorgehensmodell" name="vorgehensmodell"
+               value="{% if projekt %}{{ projekt.vorgehensmodell }}{% endif %}" required>
     </div>
 
     <div>
         <label for="fortschritt">Projektfortschritt (%):</label>
-        <input type="number" id="fortschritt" name="fortschritt" step="0.01" min="0" max="100" required>
+        <input type="number" id="fortschritt" name="fortschritt" step="0.01" min="0" max="100"
+               value="{% if projekt %}{{ projekt.fortschritt }}{% endif %}" required>
     </div>
 
     <div>
-        <button type="submit">Projekt speichern</button>
+        <button type="submit">{% if projekt %}Änderungen speichern{% else %}Projekt speichern{% endif %}</button>
         <a href="{{ url_for('projekt.list_projekte') }}">Abbrechen</a>
     </div>
 </form>

@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>{% if phase %}Projektphase bearbeiten{% else %}Neue Projektphase erstellen{% endif %}</h2>
+
+<form method="POST">
+    <div>
+        <label for="projekt_id">Projekt:</label>
+        <select id="projekt_id" name="projekt_id" required>
+            <option value="">Projekt auswählen</option>
+            {% for projekt in projekte %}
+                <option value="{{ projekt.projekt_id }}"
+                        {% if phase and phase.projekt_id == projekt.projekt_id %}selected{% endif %}>
+                    {{ projekt.projekttitel }}
+                </option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div>
+        <label for="startdatum_geplant">Startdatum (geplant):</label>
+        <input type="date" id="startdatum_geplant" name="startdatum_geplant"
+               value="{% if phase %}{{ phase.startdatum_geplant }}{% endif %}" required>
+    </div>
+
+    <div>
+        <label for="enddatum_geplant">Enddatum (geplant):</label>
+        <input type="date" id="enddatum_geplant" name="enddatum_geplant"
+               value="{% if phase %}{{ phase.enddatum_geplant }}{% endif %}" required>
+    </div>
+
+    <div>
+        <label for="phasenstatus">Status der Phase:</label>
+        <select id="phasenstatus" name="phasenstatus" required>
+            <option value="Geplant" {% if phase and phase.phasenstatus == "Geplant" %}selected{% endif %}>Geplant</option>
+            <option value="In Bearbeitung" {% if phase and phase.phasenstatus == "In Bearbeitung" %}selected{% endif %}>In Bearbeitung</option>
+            <option value="Abgeschlossen" {% if phase and phase.phasenstatus == "Abgeschlossen" %}selected{% endif %}>Abgeschlossen</option>
+        </select>
+    </div>
+
+    <div>
+        <label for="phasenfortschritt">Phasenfortschritt (%):</label>
+        <input type="number" id="phasenfortschritt" name="phasenfortschritt" step="1" min="0" max="100"
+               value="{% if phase %}{{ phase.phasenfortschritt }}{% else %}0{% endif %}">
+    </div>
+
+    <div>
+        <button type="submit">{% if phase %}Änderungen speichern{% else %}Phase erstellen{% endif %}</button>
+        <a href="{{ url_for('projektphase.list_phasen') }}">Abbrechen</a>
+    </div>
+</form>
+{% endblock %}

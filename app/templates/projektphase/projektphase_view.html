@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Projektphase: {{ phase.phasen_id }}</h2>
+
+<p><strong>Projekt ID:</strong> {{ phase.projekt_id }}</p>
+<p><strong>Startdatum (geplant):</strong> {{ phase.startdatum_geplant }}</p>
+<p><strong>Enddatum (geplant):</strong> {{ phase.enddatum_geplant }}</p>
+
+{% if phase.startdatum_effektiv %}
+    <p><strong>Startdatum (effektiv):</strong> {{ phase.startdatum_effektiv }}</p>
+{% endif %}
+
+{% if phase.enddatum_effektiv %}
+    <p><strong>Enddatum (effektiv):</strong> {{ phase.enddatum_effektiv }}</p>
+{% endif %}
+
+<p><strong>Reviewdatum (geplant):</strong> {{ phase.reviewdatum_geplant }}</p>
+<p><strong>Reviewdatum (effektiv):</strong> {{ phase.reviewdatum_effektiv }}</p>
+<p><strong>Freigabedatum:</strong> {{ phase.freigabedatum }}</p>
+<p><strong>Freigabevisum:</strong> {{ phase.freigabevisum }}</p>
+
+<p><strong>Status:</strong> {{ phase.phasenstatus }}</p>
+<p><strong>Fortschritt:</strong> {{ phase.phasenfortschritt }}%</p>
+
+<p><strong>Phasendokumente:</strong></p>
+{% if phase.phasendokumente %}
+    <a href="{{ phase.phasendokumente }}" target="_blank">Dokument anzeigen</a>
+{% else %}
+    <p>Keine Dokumente vorhanden.</p>
+{% endif %}
+
+<a href="{{ url_for('projektphase.upsert_phase', phasen_id=phase.phasen_id) }}" class="button">Bearbeiten</a>
+<a href="{{ url_for('projektphase.list_phasen') }}" class="button">Zurück zur Liste</a>
+{% endblock %}

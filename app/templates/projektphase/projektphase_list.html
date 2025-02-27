@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Projektphasen</h2>
+
+<table border="1">
+    <thead>
+        <tr>
+            <th>Projekt ID</th>
+            <th>Startdatum (geplant)</th>
+            <th>Enddatum (geplant)</th>
+            <th>Status</th>
+            <th>Fortschritt</th>
+            <th>Aktionen</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for phase in phasen %}
+        <tr>
+            <td>{{ phase.projekt_id }}</td>
+            <td>{{ phase.startdatum_geplant }}</td>
+            <td>{{ phase.enddatum_geplant }}</td>
+            <td>{{ phase.phasenstatus }}</td>
+            <td>{{ phase.phasenfortschritt }}%</td>
+            <td>
+                <a href="{{ url_for('projektphase.upsert_phase', phasen_id=phase.phasen_id) }}">Bearbeiten</a> |
+                <a href="{{ url_for('projektphase.view_phase', phasen_id=phase.phasen_id) }}">Ansehen</a> |
+                <a href="{{ url_for('projektphase.delete_phase', phasen_id=phase.phasen_id) }}"
+                   onclick="return confirm('Möchten Sie diese Phase wirklich löschen?');">Löschen</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<a href="{{ url_for('projektphase.upsert_phase') }}">Neue Projektphase erstellen</a>
+{% endblock %}

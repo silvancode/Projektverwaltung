@@ -4,8 +4,8 @@ from config.database import create_connection
 class Projekt:
     def __init__(self, projekttitel, beschreibung, bewilligungsdatum, prioritaet, status,
                  startdatum_geplant, enddatum_geplant, projektleiter_id, vorgehensmodell,
-                 fortschritt, projektreferenz=None):
-        self.projektreferenz = projektreferenz
+                 fortschritt, projektleiter_name=None, projektleiter_vorname=None, projekt_id=None):
+        self.projekt_id = projekt_id
         self.projekttitel = projekttitel
         self.beschreibung = beschreibung
         self.bewilligungsdatum = bewilligungsdatum
@@ -14,6 +14,8 @@ class Projekt:
         self.startdatum_geplant = startdatum_geplant
         self.enddatum_geplant = enddatum_geplant
         self.projektleiter_id = projektleiter_id
+        self.projektleiter_name = projektleiter_name
+        self.projektleiter_vorname = projektleiter_vorname
         self.vorgehensmodell = vorgehensmodell
         self.fortschritt = fortschritt
 
@@ -36,22 +38,49 @@ class Projekt:
     def get_all():
         connection = create_connection()
         cursor = connection.cursor(dictionary=True)
-        cursor.execute("SELECT * FROM PROJEKT")
+        query = """
+                SELECT p.*, m.Name AS projektleiter_name, m.Vorname AS projektleiter_vorname
+                FROM PROJEKT p
+                LEFT JOIN MITARBEITER m ON p.Projektleiter_ID = m.Personalnummer
+                """
+        cursor.execute(query)
         result = cursor.fetchall()
         cursor.close()
         connection.close()
-        return result
+
+        return [Projekt(
+            projekt_id=row["Projektreferenz"],
+            projekttitel=row["Projekttitel"],
+            beschreibung=row["Projektbeschreibung"],
+            bewilligungsdatum=row["Bewilligungsdatum"],
+            prioritaet=row["Prioritaet"],
+            status=row["Status"],
+            startdatum_geplant=row["Startdatum_geplant"],
+            enddatum_geplant=row["Enddatum_geplant"],
+            projektleiter_id=row["Projektleiter_ID"],
+            projektleiter_name=row["projektleiter_name"],
+            projektleiter_vorname=row["projektleiter_vorname"],
+            vorgehensmodell=row["Vorgehensmodell"],
+            fortschritt=row["Projektfortschritt"]
+        ) for row in result]
 
     @staticmethod
     def get_by_id(projekt_id):
         connection = create_connection()
         cursor = connection.cursor(dictionary=True)
-        cursor.execute("SELECT * FROM PROJEKT WHERE Projektreferenz = %s", (projekt_id,))
+        query = """
+                SELECT p.*, m.Name AS projektleiter_name, m.Vorname AS projektleiter_vorname
+                FROM PROJEKT p
+                LEFT JOIN MITARBEITER m ON p.Projektleiter_ID = m.Personalnummer
+                WHERE Projektreferenz = %s
+                """
+        cursor.execute(query, (projekt_id,))
         result = cursor.fetchone()
         cursor.close()
         connection.close()
         if result:
             return Projekt(
+                projekt_id=result["Projektreferenz"],
                 projekttitel=result["Projekttitel"],
                 beschreibung=result["Projektbeschreibung"],
                 bewilligungsdatum=result["Bewilligungsdatum"],
@@ -60,9 +89,10 @@ class Projekt:
                 startdatum_geplant=result["Startdatum_geplant"],
                 enddatum_geplant=result["Enddatum_geplant"],
                 projektleiter_id=result["Projektleiter_ID"],
+                projektleiter_name=result["projektleiter_name"],
+                projektleiter_vorname=result["projektleiter_vorname"],
                 vorgehensmodell=result["Vorgehensmodell"],
-                fortschritt=result["Projektfortschritt"],
-                projektreferenz=result["Projektreferenz"]
+                fortschritt=result["Projektfortschritt"]
             )
         return None
 
@@ -78,7 +108,7 @@ class Projekt:
         """
         data = (self.projekttitel, self.beschreibung, self.bewilligungsdatum, self.prioritaet, self.status,
                 self.startdatum_geplant, self.enddatum_geplant, self.projektleiter_id, self.vorgehensmodell,
-                self.fortschritt, self.projektreferenz)
+                self.fortschritt, self.projekt_id)
         cursor.execute(query, data)
         connection.commit()
         cursor.close()

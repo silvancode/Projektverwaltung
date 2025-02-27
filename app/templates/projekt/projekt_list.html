@@ -6,9 +6,8 @@
 <table border="1">
     <thead>
         <tr>
-            <th>Projektreferenz</th>
             <th>Projekttitel</th>
-            <th>Projektleiter (ID)</th>
+            <th>Projektleiter</th>
             <th>Priorität</th>
             <th>Status</th>
             <th>Startdatum (geplant)</th>
@@ -20,18 +19,17 @@
     <tbody>
         {% for projekt in projekte %}
         <tr>
-            <td>{{ projekt.Projektreferenz }}</td>
-            <td>{{ projekt.Projekttitel }}</td>
-            <td>{{ projekt.Projektleiter_ID }}</td>
-            <td>{{ projekt.Prioritaet }}</td>
-            <td>{{ projekt.Status }}</td>
-            <td>{{ projekt.Startdatum_geplant }}</td>
-            <td>{{ projekt.Enddatum_geplant }}</td>
-            <td>{{ projekt.Projektfortschritt }}%</td>
+            <td>{{ projekt.projekttitel }}</td>
+            <td>{{ projekt.projektleiter_vorname }} {{ projekt.projektleiter_name }}</td>
+            <td>{{ projekt.prioritaet }}</td>
+            <td>{{ projekt.status }}</td>
+            <td>{{ projekt.startdatum_geplant }}</td>
+            <td>{{ projekt.enddatum_geplant }}</td>
+            <td>{{ projekt.fortschritt }}%</td>
             <td>
-                <a href="{{ url_for('projekt.view_projekt', projekt_id=projekt.Projektreferenz) }}">Ansehen</a> |
-                <a href="{{ url_for('projekt.edit_projekt', projekt_id=projekt.Projektreferenz) }}">Bearbeiten</a> |
-                <a href="{{ url_for('projekt.delete_projekt', projekt_id=projekt.Projektreferenz) }}"
+                <a href="{{ url_for('projekt.view_projekt', projekt_id=projekt.projekt_id) }}">Ansehen</a> |
+                <a href="{{ url_for('projekt.upsert_projekt', projekt_id=projekt.projekt_id) }}">Bearbeiten</a> |
+                <a href="{{ url_for('projekt.delete_projekt', projekt_id=projekt.projekt_id) }}"
                    onclick="return confirm('Sind Sie sicher, dass Sie dieses Projekt löschen möchten?');">
                    Löschen
                 </a>
@@ -41,6 +39,6 @@
     </tbody>
 </table>
 
-<a href="{{ url_for('projekt.create_projekt') }}">Neues Projekt erstellen</a>
+<a href="{{ url_for('projekt.upsert_projekt') }}">Neues Projekt erstellen</a>
 
 {% endblock %}

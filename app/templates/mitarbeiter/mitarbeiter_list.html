@@ -22,7 +22,7 @@
             <td>{{ mitarbeiter.Arbeitspensum }}%</td>
             <td>
                 <a href="{{ url_for('mitarbeiter.view_mitarbeiter', mitarbeiter_id=mitarbeiter.Personalnummer) }}">Ansehen</a> |
-                <a href="{{ url_for('mitarbeiter.edit_mitarbeiter', mitarbeiter_id=mitarbeiter.Personalnummer) }}">Bearbeiten</a> |
+                <a href="{{ url_for('mitarbeiter.upsert_mitarbeiter', mitarbeiter_id=mitarbeiter.Personalnummer) }}">Bearbeiten</a> |
                 <a href="{{ url_for('mitarbeiter.delete_mitarbeiter', mitarbeiter_id=mitarbeiter.Personalnummer) }}"
                    onclick="return confirm('Sind Sie sicher, dass Sie diesen Mitarbeiter löschen möchten?');">
                    Löschen
@@ -32,5 +32,5 @@
         {% endfor %}
     </tbody>
 </table>
-<a href="{{ url_for('mitarbeiter.create_mitarbeiter') }}">Neuen Mitarbeiter hinzufügen</a>
+<a href="{{ url_for('mitarbeiter.upsert_mitarbeiter') }}">Neuen Mitarbeiter hinzufügen</a>
 {% endblock %}
