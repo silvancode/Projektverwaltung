@@ -19,6 +19,7 @@ def upsert_phase(phasen_id=None):
 
     if request.method == "POST":
         projekt_id = request.form["projekt_id"]
+        phasenname = request.form["phasenname"]
         startdatum_geplant = request.form["startdatum_geplant"]
         enddatum_geplant = request.form["enddatum_geplant"]
         phasenstatus = request.form["phasenstatus"]
@@ -27,6 +28,7 @@ def upsert_phase(phasen_id=None):
         if phase:
             # Bearbeiten einer vorhandenen Phase
             phase.projekt_id = projekt_id
+            phase.phasenname = phasenname
             phase.startdatum_geplant = startdatum_geplant
             phase.enddatum_geplant = enddatum_geplant
             phase.phasenstatus = phasenstatus
@@ -36,6 +38,7 @@ def upsert_phase(phasen_id=None):
             # Neue Projektphase erstellen
             neue_phase = Projektphase(
                 projekt_id=projekt_id,
+                phasenname=phasenname,
                 startdatum_geplant=startdatum_geplant,
                 enddatum_geplant=enddatum_geplant,
                 phasenstatus=phasenstatus,

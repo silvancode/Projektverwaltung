@@ -5,6 +5,12 @@
 
 <form method="POST">
     <div>
+        <label for="phasenname">Phasenname:</label>
+        <input type="text" id="phasenname" name="phasenname"
+               value="{% if phase %}{{ phase.phasenname }}{% endif %}" required>
+    </div>
+
+    <div>
         <label for="projekt_id">Projekt:</label>
         <select id="projekt_id" name="projekt_id" required>
             <option value="">Projekt auswählen</option>

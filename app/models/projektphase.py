@@ -2,7 +2,7 @@ from config.database import create_connection
 
 
 class Projektphase:
-    def __init__(self, projekt_id, startdatum_geplant, enddatum_geplant,
+    def __init__(self, projekt_id, phasenname, startdatum_geplant, enddatum_geplant,
                  startdatum_effektiv=None, enddatum_effektiv=None,
                  reviewdatum_geplant=None, reviewdatum_effektiv=None,
                  freigabedatum=None, freigabevisum=None,
@@ -10,6 +10,7 @@ class Projektphase:
                  phasendokumente=None, phasen_id=None):
         self.phasen_id = phasen_id
         self.projekt_id = projekt_id
+        self.phasenname = phasenname
         self.startdatum_geplant = startdatum_geplant
         self.enddatum_geplant = enddatum_geplant
         self.startdatum_effektiv = startdatum_effektiv
@@ -26,12 +27,12 @@ class Projektphase:
         connection = create_connection()
         cursor = connection.cursor()
         query = """
-        INSERT INTO PROJEKTPHASE (Projekt_ID, Startdatum_geplant, Enddatum_geplant, Startdatum_effektiv,
+        INSERT INTO PROJEKTPHASE (Projekt_ID, Phasenname, Startdatum_geplant, Enddatum_geplant, Startdatum_effektiv,
                                   Enddatum_effektiv, Reviewdatum_geplant, Reviewdatum_effektiv,
-                                  Freigabedatum, Freigabevisum, Phasenstatus, Phasenfortschritt, LinkPhasendokumente)
-        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                                  Freigabedatum, Freigabevisum, Phasenstatus, Phasenfortschritt, Phasendokumente)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
         """
-        data = (self.projekt_id, self.startdatum_geplant, self.enddatum_geplant,
+        data = (self.projekt_id, self.phasenname, self.startdatum_geplant, self.enddatum_geplant,
                 self.startdatum_effektiv, self.enddatum_effektiv,
                 self.reviewdatum_geplant, self.reviewdatum_effektiv,
                 self.freigabedatum, self.freigabevisum,
@@ -53,7 +54,8 @@ class Projektphase:
 
         return [Projektphase(
             projekt_id=row["Projekt_ID"],
-            phasen_id=row["PhasenID"],
+            phasenname=row["Phasenname"],
+            phasen_id=row["Phasen_ID"],
             startdatum_geplant=row["Startdatum_geplant"],
             enddatum_geplant=row["Enddatum_geplant"],
             startdatum_effektiv=row["Startdatum_effektiv"],
@@ -64,14 +66,14 @@ class Projektphase:
             freigabevisum=row["Freigabevisum"],
             phasenstatus=row["Phasenstatus"],
             phasenfortschritt=row["Phasenfortschritt"],
-            phasendokumente=row["LinkPhasendokumente"]
+            phasendokumente=row["Phasendokumente"]
         ) for row in result]
 
     @staticmethod
     def get_by_id(phasen_id):
         connection = create_connection()
         cursor = connection.cursor(dictionary=True)
-        query = "SELECT * FROM PROJEKTPHASE WHERE PhasenID = %s"
+        query = "SELECT * FROM PROJEKTPHASE WHERE Phasen_ID = %s"
         cursor.execute(query, (phasen_id,))
         result = cursor.fetchone()
         cursor.close()
@@ -80,7 +82,8 @@ class Projektphase:
         if result:
             return Projektphase(
                 projekt_id=result["Projekt_ID"],
-                phasen_id=result["PhasenID"],
+                phasenname=result["Phasenname"],
+                phasen_id=result["Phasen_ID"],
                 startdatum_geplant=result["Startdatum_geplant"],
                 enddatum_geplant=result["Enddatum_geplant"],
                 startdatum_effektiv=result["Startdatum_effektiv"],
@@ -91,7 +94,7 @@ class Projektphase:
                 freigabevisum=result["Freigabevisum"],
                 phasenstatus=result["Phasenstatus"],
                 phasenfortschritt=result["Phasenfortschritt"],
-                phasendokumente=result["LinkPhasendokumente"]
+                phasendokumente=result["Phasendokumente"]
             )
         return None
 
@@ -100,13 +103,13 @@ class Projektphase:
         cursor = connection.cursor()
         query = """
         UPDATE PROJEKTPHASE
-        SET Projekt_ID = %s, Startdatum_geplant = %s, Enddatum_geplant = %s, Startdatum_effektiv = %s,
+        SET Projekt_ID = %s, Phasenname = %s, Startdatum_geplant = %s, Enddatum_geplant = %s, Startdatum_effektiv = %s,
             Enddatum_effektiv = %s, Reviewdatum_geplant = %s, Reviewdatum_effektiv = %s,
             Freigabedatum = %s, Freigabevisum = %s, Phasenstatus = %s, Phasenfortschritt = %s,
-            LinkPhasendokumente = %s
-        WHERE PhasenID = %s
+            Phasendokumente = %s
+        WHERE Phasen_ID = %s
         """
-        data = (self.projekt_id, self.startdatum_geplant, self.enddatum_geplant, self.startdatum_effektiv,
+        data = (self.projekt_id, self.phasenname, self.startdatum_geplant, self.enddatum_geplant, self.startdatum_effektiv,
                 self.enddatum_effektiv, self.reviewdatum_geplant, self.reviewdatum_effektiv,
                 self.freigabedatum, self.freigabevisum, self.phasenstatus,
                 self.phasenfortschritt, self.phasendokumente, self.phasen_id)
@@ -119,7 +122,7 @@ class Projektphase:
     def delete(phasen_id):
         connection = create_connection()
         cursor = connection.cursor()
-        query = "DELETE FROM PROJEKTPHASE WHERE PhasenID = %s"
+        query = "DELETE FROM PROJEKTPHASE WHERE Phasen_ID = %s"
         cursor.execute(query, (phasen_id,))
         connection.commit()
         cursor.close()

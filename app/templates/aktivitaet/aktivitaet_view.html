@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Aktivität: {{ aktivitaet.name }}</h2>
+<p><strong>Beschreibung:</strong> {{ aktivitaet.beschreibung }}</p>
+<p><strong>Startdatum:</strong> {{ aktivitaet.startdatum }}</p>
+<p><strong>Enddatum:</strong> {{ aktivitaet.enddatum }}</p>
+<p><strong>Budget:</strong> {{ aktivitaet.budget }}</p>
+<p><strong>Effektive Kosten:</strong> {{ aktivitaet.effektive_kosten }}</p>
+<p><strong>Pensum:</strong> {{ aktivitaet.pensum }}</p>
+<p><strong>Verantwortlicher Mitarbeiter ID:</strong> {{ aktivitaet.verantwortlicher_id }}</p>
+<p><strong>Projektphase ID:</strong> {{ aktivitaet.projektphase_id }}</p>
+
+<a href="{{ url_for('aktivitaet.upsert_aktivitaet', aktivitaet_id=aktivitaet.aktivitaet_id) }}" class="button">Bearbeiten</a>
+<a href="{{ url_for('aktivitaet.list_aktivitaeten') }}" class="button">Zurück</a>
+{% endblock %}

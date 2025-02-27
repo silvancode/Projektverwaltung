@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>{% if aktivitaet %}Aktivität bearbeiten{% else %}Neue Aktivität erstellen{% endif %}</h2>
+
+<form method="POST">
+    <div>
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name"
+               value="{% if aktivitaet %}{{ aktivitaet.name }}{% endif %}" required>
+    </div>
+
+    <div>
+        <label for="beschreibung">Beschreibung:</label>
+        <textarea id="beschreibung" name="beschreibung" required>
+            {% if aktivitaet %}{{ aktivitaet.beschreibung }}{% endif %}
+        </textarea>
+    </div>
+
+    <div>
+        <label for="startdatum">Startdatum:</label>
+        <input type="date" id="startdatum" name="startdatum"
+               value="{% if aktivitaet %}{{ aktivitaet.startdatum }}{% endif %}" required>
+    </div>
+
+    <div>
+        <label for="enddatum">Enddatum:</label>
+        <input type="date" id="enddatum" name="enddatum"
+               value="{% if aktivitaet %}{{ aktivitaet.enddatum }}{% endif %}">
+    </div>
+
+    <div>
+        <label for="verantwortlicher_id">Verantwortlicher Mitarbeiter:</label>
+        <select id="verantwortlicher_id" name="verantwortlicher_id">
+            <option value="" disabled {% if not aktivitaet %}selected{% endif %}>- wählen -</option>
+            {% for m in mitarbeiter %}
+                <option value="{{ m.Personalnummer }}"
+                        {% if aktivitaet and aktivitaet.verantwortlicher_id == m.Personalnummer %}selected{% endif %}>
+                    {{ m.Vorname }} {{ m.Name }}
+                </option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div>
+        <label for="budget">Budget:</label>
+        <input type="number" step="0.01" id="budget" name="budget"
+               value="{% if aktivitaet %}{{ aktivitaet.budget }}{% endif %}">
+    </div>
+
+    <div>
+        <label for="effektive_kosten">Effektive Kosten:</label>
+        <input type="number" step="0.01" id="effektive_kosten" name="effektive_kosten"
+               value="{% if aktivitaet %}{{ aktivitaet.effektive_kosten }}{% endif %}">
+    </div>
+
+    <div>
+        <label for="pensum">Pensum (in %):</label>
+        <input type="number" id="pensum" name="pensum"
+               value="{% if aktivitaet %}{{ aktivitaet.pensum }}{% endif %}">
+    </div>
+
+    <div>
+        <label for="projektphase_id">Projektphase:</label>
+        <select id="projektphase_id" name="projektphase_id">
+            <option value="" disabled {% if not aktivitaet %}selected{% endif %}>- wählen -</option>
+            {% for p in phasen %}
+                <option value="{{ p.phasen_id }}"
+                        {% if aktivitaet and aktivitaet.projektphase_id == p.phasen_id %}selected{% endif %}>
+                    Phase {{ p.phasen_id }} (Projekt: {{ p.projekt_id }})
+                </option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div>
+        <button type="submit">
+            {% if aktivitaet %}Änderungen speichern{% else %}Erstellen{% endif %}
+        </button>
+        <a href="{{ url_for('aktivitaet.list_aktivitaeten') }}">Abbrechen</a>
+    </div>
+</form>
+{% endblock %}
