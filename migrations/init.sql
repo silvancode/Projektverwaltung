@@ -1,6 +1,6 @@
--- =======================================================
--- Init-Skript für MySQL basierend auf dem ERM (inkl. Aktivität)
--- =======================================================
+-- =======================================
+-- Init-Skript für MySQL
+-- =======================================
 
 -- ---------------------------------------
 -- Datenbank erstellen / verwenden
@@ -97,6 +97,7 @@ CREATE TABLE AKTIVITAET (
     EffektiveKosten      DECIMAL(10,2),
     Pensum               INT,
     Projektphase_ID      INT,
+    Aktivitaetsdokumente TEXT,
     PRIMARY KEY (AktivitaetID),
     CONSTRAINT fk_aktivitaet_verantwortlicher
       FOREIGN KEY (Verantwortlicher_ID)
@@ -110,7 +111,4 @@ CREATE TABLE AKTIVITAET (
       ON UPDATE CASCADE
 ) ENGINE=InnoDB;
 
--- ---------------------------------------
--- Optional: Ende/Commit
--- ---------------------------------------
 COMMIT;

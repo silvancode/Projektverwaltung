@@ -11,6 +11,7 @@
             <th>Enddatum</th>
             <th>Budget</th>
             <th>Effektive Kosten</th>
+            <th>Dokumente</th>
             <th>Aktionen</th>
         </tr>
     </thead>
@@ -23,6 +24,13 @@
             <td>{{ akt.enddatum }}</td>
             <td>{{ akt.budget }}</td>
             <td>{{ akt.effektive_kosten }}</td>
+            <td>
+                {% if akt.aktivitaetsdokumente %}
+                    {{ akt.aktivitaetsdokumente.split(',') | length }} Dokument(e)
+                {% else %}
+                    Keine Dokumente
+                {% endif %}
+            </td>
             <td>
                 <a href="{{ url_for('aktivitaet.view_aktivitaet', aktivitaet_id=akt.aktivitaet_id) }}">Ansehen</a> |
                 <a href="{{ url_for('aktivitaet.upsert_aktivitaet', aktivitaet_id=akt.aktivitaet_id) }}">Bearbeiten</a> |

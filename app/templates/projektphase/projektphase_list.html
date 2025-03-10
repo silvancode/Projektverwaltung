@@ -11,6 +11,7 @@
             <th>Enddatum (geplant)</th>
             <th>Status</th>
             <th>Fortschritt</th>
+            <th>Dokumente</th>
             <th>Aktionen</th>
         </tr>
     </thead>
@@ -22,6 +23,13 @@
             <td>{{ phase.enddatum_geplant }}</td>
             <td>{{ phase.phasenstatus }}</td>
             <td>{{ phase.phasenfortschritt }}%</td>
+            <td>
+                {% if phase.phasendokumente %}
+                    {{ phase.phasendokumente.split(',') | length }} Dokument(e)
+                {% else %}
+                    Keine Dokumente
+                {% endif %}
+            </td>
             <td>
                 <a href="{{ url_for('projektphase.upsert_phase', phasen_id=phase.phasen_id) }}">Bearbeiten</a> |
                 <a href="{{ url_for('projektphase.view_phase', phasen_id=phase.phasen_id) }}">Ansehen</a> |

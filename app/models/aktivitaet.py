@@ -1,8 +1,9 @@
 from config.database import create_connection
 
+
 class Aktivitaet:
     def __init__(self, name, beschreibung, startdatum, enddatum, verantwortlicher_id,
-                 budget, effektive_kosten, pensum, projektphase_id, aktivitaet_id=None):
+                 budget, effektive_kosten, pensum, projektphase_id, aktivitaetsdokumente=None, aktivitaet_id=None):
         self.aktivitaet_id = aktivitaet_id
         self.name = name
         self.beschreibung = beschreibung
@@ -13,6 +14,7 @@ class Aktivitaet:
         self.effektive_kosten = effektive_kosten
         self.pensum = pensum
         self.projektphase_id = projektphase_id
+        self.aktivitaetsdokumente = aktivitaetsdokumente
 
     def save(self):
         """
@@ -22,12 +24,12 @@ class Aktivitaet:
         cursor = connection.cursor()
         query = """
         INSERT INTO AKTIVITAET 
-        (Name, Beschreibung, Startdatum, Enddatum, Verantwortlicher_ID, Budget, EffektiveKosten, Pensum, Projektphase_ID)
-        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+        (Name, Beschreibung, Startdatum, Enddatum, Verantwortlicher_ID, Budget, EffektiveKosten, Pensum, Projektphase_ID, Aktivitaetsdokumente)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
         """
         data = (self.name, self.beschreibung, self.startdatum, self.enddatum,
                 self.verantwortlicher_id, self.budget, self.effektive_kosten,
-                self.pensum, self.projektphase_id)
+                self.pensum, self.projektphase_id, self.aktivitaetsdokumente)
         cursor.execute(query, data)
         connection.commit()
         cursor.close()
@@ -61,7 +63,8 @@ class Aktivitaet:
                 budget=row["Budget"],
                 effektive_kosten=row["EffektiveKosten"],
                 pensum=row["Pensum"],
-                projektphase_id=row["Projektphase_ID"]
+                projektphase_id=row["Projektphase_ID"],
+                aktivitaetsdokumente=row.get("Aktivitaetsdokumente")
             ))
         return aktivitaeten
 
@@ -93,7 +96,8 @@ class Aktivitaet:
                 budget=row["Budget"],
                 effektive_kosten=row["EffektiveKosten"],
                 pensum=row["Pensum"],
-                projektphase_id=row["Projektphase_ID"]
+                projektphase_id=row["Projektphase_ID"],
+                aktivitaetsdokumente=row.get("Aktivitaetsdokumente")
             )
         return None
 
@@ -107,12 +111,12 @@ class Aktivitaet:
         UPDATE AKTIVITAET
         SET Name = %s, Beschreibung = %s, Startdatum = %s, Enddatum = %s,
             Verantwortlicher_ID = %s, Budget = %s, EffektiveKosten = %s,
-            Pensum = %s, Projektphase_ID = %s
+            Pensum = %s, Projektphase_ID = %s, Aktivitaetsdokumente = %s
         WHERE AktivitaetID = %s
         """
         data = (self.name, self.beschreibung, self.startdatum, self.enddatum,
                 self.verantwortlicher_id, self.budget, self.effektive_kosten,
-                self.pensum, self.projektphase_id, self.aktivitaet_id)
+                self.pensum, self.projektphase_id, self.aktivitaetsdokumente, self.aktivitaet_id)
         cursor.execute(query, data)
         connection.commit()
         cursor.close()

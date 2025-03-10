@@ -2,7 +2,7 @@
 {% block content %}
 <h2>{% if aktivitaet %}Aktivität bearbeiten{% else %}Neue Aktivität erstellen{% endif %}</h2>
 
-<form method="POST">
+<form method="POST" enctype="multipart/form-data">
     <div>
         <label for="name">Name:</label>
         <input type="text" id="name" name="name"
@@ -41,14 +41,14 @@
         </select>
     </div>
 
-    <div>
-        <label for="budget">Budget:</label>
+     <div>
+        <label for="budget">Budget (CHF):</label>
         <input type="number" step="0.01" id="budget" name="budget"
-               value="{% if aktivitaet %}{{ aktivitaet.budget }}{% endif %}">
+               value="{% if aktivitaet %}{{ aktivitaet.budget }}{% endif %}" required>
     </div>
 
     <div>
-        <label for="effektive_kosten">Effektive Kosten:</label>
+        <label for="effektive_kosten">Effektive Kosten (CHF):</label>
         <input type="number" step="0.01" id="effektive_kosten" name="effektive_kosten"
                value="{% if aktivitaet %}{{ aktivitaet.effektive_kosten }}{% endif %}">
     </div>
@@ -70,6 +70,15 @@
                 </option>
             {% endfor %}
         </select>
+    </div>
+
+    <div>
+        <label for="aktivitaetsdokument">Aktivitätsdokument hochladen:</label>
+        <input type="file" id="aktivitaetsdokument" name="aktivitaetsdokument">
+
+        {% if aktivitaet and aktivitaet.aktivitaetsdokumente %}
+            <p>Bereits hochgeladen: <a href="{{ url_for('static', filename=aktivitaet.aktivitaetsdokumente) }}" target="_blank">Dokument ansehen</a></p>
+        {% endif %}
     </div>
 
     <div>

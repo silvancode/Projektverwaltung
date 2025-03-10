@@ -23,9 +23,13 @@
 <p><strong>Status:</strong> {{ phase.phasenstatus }}</p>
 <p><strong>Fortschritt:</strong> {{ phase.phasenfortschritt }}%</p>
 
-<p><strong>Phasendokumente:</strong></p>
+<p><strong>Dokumentenablage:</strong></p>
 {% if phase.phasendokumente %}
-    <a href="{{ phase.phasendokumente }}" target="_blank">Dokument anzeigen</a>
+    <ul>
+        {% for dokument in phase.phasendokumente.split(',') %}
+            <li><a href="{{ url_for('static', filename='uploads/' + dokument.split('/')[-1]) }}" target="_blank">{{ dokument.split('/')[-1] }}</a></li>
+        {% endfor %}
+    </ul>
 {% else %}
     <p>Keine Dokumente vorhanden.</p>
 {% endif %}

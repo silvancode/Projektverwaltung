@@ -1,4 +1,7 @@
-from flask import Blueprint, render_template, request, redirect, url_for
+from flask import Blueprint, render_template, request, redirect, url_for, flash
+import os
+from werkzeug.utils import secure_filename
+from config.config import UPLOAD_FOLDER, allowed_file
 from app.models.projektphase import Projektphase
 from app.models.projekt import Projekt  # Import Projekt-Modell
 
@@ -15,6 +18,8 @@ def list_phasen():
 @projektphase_blueprint.route("/<int:phasen_id>/edit", methods=["GET", "POST"])
 def upsert_phase(phasen_id=None):
     phase = Projektphase.get_by_id(phasen_id) if phasen_id else None
+    dokumentenpfad = phase.phasendokumente if phase else None
+
     projekte = Projekt.get_all()  # Alle Projekte für das Dropdown abrufen
 
     if request.method == "POST":
@@ -25,6 +30,15 @@ def upsert_phase(phasen_id=None):
         phasenstatus = request.form["phasenstatus"]
         phasenfortschritt = request.form["phasenfortschritt"]
 
+        # Datei-Upload prüfen
+        if "phasendokument" in request.files:
+            file = request.files["phasendokument"]
+            if file and allowed_file(file.filename):
+                filename = secure_filename(file.filename)
+                filepath = os.path.join(UPLOAD_FOLDER, filename)
+                file.save(filepath)
+                dokumentenpfad = "uploads/" + filename
+
         if phase:
             # Bearbeiten einer vorhandenen Phase
             phase.projekt_id = projekt_id
@@ -33,6 +47,7 @@ def upsert_phase(phasen_id=None):
             phase.enddatum_geplant = enddatum_geplant
             phase.phasenstatus = phasenstatus
             phase.phasenfortschritt = phasenfortschritt
+            phase.phasendokumente = dokumentenpfad
             phase.update()
         else:
             # Neue Projektphase erstellen
@@ -42,10 +57,12 @@ def upsert_phase(phasen_id=None):
                 startdatum_geplant=startdatum_geplant,
                 enddatum_geplant=enddatum_geplant,
                 phasenstatus=phasenstatus,
-                phasenfortschritt=phasenfortschritt
+                phasenfortschritt=phasenfortschritt,
+                phasendokumente=dokumentenpfad
             )
             neue_phase.save()
 
+        flash("Projektphase erfolgreich gespeichert.", "success")
         return redirect(url_for("projektphase.list_phasen"))
 
     # Projekte an das Template übergeben

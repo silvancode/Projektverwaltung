@@ -3,7 +3,8 @@
 {% block content %}
 <h2>{% if phase %}Projektphase bearbeiten{% else %}Neue Projektphase erstellen{% endif %}</h2>
 
-<form method="POST">
+<!-- Formular mit Datei-Upload -->
+<form method="POST" enctype="multipart/form-data">
     <div>
         <label for="phasenname">Phasenname:</label>
         <input type="text" id="phasenname" name="phasenname"
@@ -48,6 +49,16 @@
         <label for="phasenfortschritt">Phasenfortschritt (%):</label>
         <input type="number" id="phasenfortschritt" name="phasenfortschritt" step="1" min="0" max="100"
                value="{% if phase %}{{ phase.phasenfortschritt }}{% else %}0{% endif %}">
+    </div>
+
+    <!-- Datei-Upload für Phasendokument -->
+    <div>
+        <label for="phasendokument">Phasendokument hochladen:</label>
+        <input type="file" id="phasendokument" name="phasendokument">
+
+        {% if phase and phase.phasendokumente %}
+            <p>Bereits hochgeladen: <a href="{{ url_for('static', filename=phase.phasendokumente) }}" target="_blank">Dokument ansehen</a></p>
+        {% endif %}
     </div>
 
     <div>

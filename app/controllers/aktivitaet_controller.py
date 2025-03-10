@@ -1,9 +1,13 @@
-from flask import Blueprint, render_template, request, redirect, url_for
+from flask import Blueprint, render_template, request, redirect, url_for, flash
+import os
+from werkzeug.utils import secure_filename
+from config.config import UPLOAD_FOLDER, allowed_file
 from app.models.aktivitaet import Aktivitaet
 from app.models.mitarbeiter import Mitarbeiter
 from app.models.projektphase import Projektphase
 
 aktivitaet_blueprint = Blueprint("aktivitaet", __name__, template_folder="../templates/aktivitaet")
+
 
 @aktivitaet_blueprint.route("/", methods=["GET"])
 def list_aktivitaeten():
@@ -13,6 +17,7 @@ def list_aktivitaeten():
     aktivitaeten = Aktivitaet.get_all()
     return render_template("aktivitaet/aktivitaet_list.html", aktivitaeten=aktivitaeten)
 
+
 @aktivitaet_blueprint.route("/new", methods=["GET", "POST"])
 @aktivitaet_blueprint.route("/<int:aktivitaet_id>/edit", methods=["GET", "POST"])
 def upsert_aktivitaet(aktivitaet_id=None):
@@ -20,6 +25,7 @@ def upsert_aktivitaet(aktivitaet_id=None):
     Neue Aktivität erstellen oder bestehende Aktivität bearbeiten.
     """
     aktivitaet = Aktivitaet.get_by_id(aktivitaet_id) if aktivitaet_id else None
+    dokumentenpfad = aktivitaet.aktivitaetsdokumente if aktivitaet else None
 
     # Für Dropdown-Felder, z.B. verantwortliche Mitarbeiter, Projektphasen
     mitarbeiter = Mitarbeiter.get_all()
@@ -36,6 +42,15 @@ def upsert_aktivitaet(aktivitaet_id=None):
         pensum = request.form["pensum"]
         projektphase_id = request.form["projektphase_id"]
 
+        # Datei-Upload prüfen
+        if "aktivitaetsdokument" in request.files:
+            file = request.files["aktivitaetsdokument"]
+            if file and allowed_file(file.filename):
+                filename = secure_filename(file.filename)
+                filepath = os.path.join(UPLOAD_FOLDER, filename)
+                file.save(filepath)
+                dokumentenpfad = "uploads/" + filename  # Nur den relativen Pfad speichern
+
         if aktivitaet:
             # Bearbeiten einer vorhandenen Aktivität
             aktivitaet.name = name
@@ -47,6 +62,7 @@ def upsert_aktivitaet(aktivitaet_id=None):
             aktivitaet.effektive_kosten = effektive_kosten
             aktivitaet.pensum = pensum
             aktivitaet.projektphase_id = projektphase_id
+            aktivitaet.aktivitaetsdokumente = dokumentenpfad
 
             aktivitaet.update()
         else:
@@ -60,10 +76,12 @@ def upsert_aktivitaet(aktivitaet_id=None):
                 budget=budget,
                 effektive_kosten=effektive_kosten,
                 pensum=pensum,
-                projektphase_id=projektphase_id
+                projektphase_id=projektphase_id,
+                aktivitaetsdokumente=dokumentenpfad
             )
             neue_aktivitaet.save()
 
+        flash("Aktivität erfolgreich gespeichert.", "success")
         return redirect(url_for("aktivitaet.list_aktivitaeten"))
 
     # GET: Formular anzeigen
@@ -71,6 +89,7 @@ def upsert_aktivitaet(aktivitaet_id=None):
                            aktivitaet=aktivitaet,
                            mitarbeiter=mitarbeiter,
                            phasen=phasen)
+
 
 @aktivitaet_blueprint.route("/<int:aktivitaet_id>", methods=["GET"])
 def view_aktivitaet(aktivitaet_id):
@@ -81,6 +100,7 @@ def view_aktivitaet(aktivitaet_id):
     if aktivitaet:
         return render_template("aktivitaet/aktivitaet_view.html", aktivitaet=aktivitaet)
     return redirect(url_for("aktivitaet.list_aktivitaeten"))
+
 
 @aktivitaet_blueprint.route("/<int:aktivitaet_id>/delete", methods=["GET", "POST"])
 def delete_aktivitaet(aktivitaet_id):

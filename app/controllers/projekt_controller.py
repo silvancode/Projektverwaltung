@@ -15,7 +15,7 @@ def list_projekte():
 @projekt_blueprint.route("/<int:projekt_id>/edit", methods=["GET", "POST"])
 def upsert_projekt(projekt_id=None):
     projekt = Projekt.get_by_id(projekt_id) if projekt_id else None
-    mitarbeiter = Mitarbeiter.get_all() # Alle Mitarbeiter abrufen
+    mitarbeiter = Mitarbeiter.get_all()  # Alle Mitarbeiter abrufen
 
     if request.method == "POST":
         projekttitel = request.form["projekttitel"]
