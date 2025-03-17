@@ -61,17 +61,17 @@ class Mitarbeiter:
         SET Name = %s, Vorname = %s, Abteilung = %s, Arbeitspensum = %s, MoeglicheFunktionen = %s
         WHERE Personalnummer = %s
         """
-        data = (self.name, self.vorname, self.abteilung, self.arbeitspensum, self.moegliche_funktionen)
+        data = (self.name, self.vorname, self.abteilung, self.arbeitspensum, self.moegliche_funktionen, self.personalnummer)
         cursor.execute(query, data)
         connection.commit()
         cursor.close()
         connection.close()
 
     @staticmethod
-    def delete(projekt_id):
+    def delete(mitarbeiter_id):
         connection = create_connection()
         cursor = connection.cursor()
-        cursor.execute("DELETE FROM mitarbeiter WHERE Personalnummer = %s", (projekt_id,))
+        cursor.execute("DELETE FROM mitarbeiter WHERE Personalnummer = %s", (mitarbeiter_id,))
         connection.commit()
         cursor.close()
         connection.close()

@@ -6,6 +6,7 @@
 <table border="1">
     <thead>
         <tr>
+            <th>Phasenname</th>
             <th>Projekt ID</th>
             <th>Startdatum (geplant)</th>
             <th>Enddatum (geplant)</th>
@@ -18,6 +19,7 @@
     <tbody>
         {% for phase in phasen %}
         <tr>
+            <td>{{ phase.phasenname }}</td>
             <td>{{ phase.projekt_id }}</td>
             <td>{{ phase.startdatum_geplant }}</td>
             <td>{{ phase.enddatum_geplant }}</td>

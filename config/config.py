@@ -1,7 +1,7 @@
 import os
 
 UPLOAD_FOLDER = os.path.join("app", "static", "uploads")  # Speichert in app/static/uploads/
-ALLOWED_EXTENSIONS = {"pdf", "docx", "png", "jpg"}
+ALLOWED_EXTENSIONS = {"pdf", "docx", "png", "jpg", "xlsx"}
 
 SECRET_KEY = os.urandom(24)  # Sicheren Key generieren
 
